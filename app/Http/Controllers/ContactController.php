@@ -1,0 +1,91 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Contact;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
+use Inertia\Inertia;
+
+class ContactController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        return Inertia::render('Contacts/Index', [
+            'contacts' => Contact::all(),
+        ]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {   
+        $validated = $request->validate([
+            'fullname' => 'required|string|max:255',
+            'birthdate' => 'required|date',
+            'relation' => 'required|string|max:255',
+            'address' => 'required|string|max:255',
+        ]);
+
+        $request->user()->contacts()->create($request->all());
+
+        return redirect(route('contacts.index'));
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(Contact $contact)
+    {
+
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Contact $contact)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, Contact $contact)
+    {
+        Gate::authorize('update', $contact);
+
+        $validated = $request->validate([
+            'fullname' => 'required|string|max:255',
+            'birthdate' => 'required|date',
+            'relation' => 'required|string|max:255',
+            'address' => 'required|string|max:255',
+        ]);
+
+        $contact->update($request->all());
+
+        return redirect(route('contacts.index'));
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Contact $contact)
+    {
+        Gate::authorize('delete', $contact);
+        $contact->delete();
+        return redirect(route('contacts.index'));
+    }
+}
