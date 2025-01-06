@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\BirthdaySent;
+use App\Events\ChirpCreated;
+use App\Models\Chirp;
 use App\Models\Contact;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -15,7 +18,7 @@ class ContactController extends Controller
     public function index()
     {
         return Inertia::render('Contacts/Index', [
-            'contacts' => Contact::all(),
+            'contacts' => Contact::where('user_id', auth()->user()->id)->get(),
         ]);
     }
 
@@ -49,7 +52,7 @@ class ContactController extends Controller
      */
     public function show(Contact $contact)
     {
-
+        //
     }
 
     /**
@@ -57,7 +60,10 @@ class ContactController extends Controller
      */
     public function edit(Contact $contact)
     {
-        //
+        Gate::authorize('update', $contact);
+        return Inertia::render('Contacts/Edit', [
+            'contact' => Contact::findOrFail($contact->id),
+        ]);
     }
 
     /**
@@ -87,5 +93,15 @@ class ContactController extends Controller
         Gate::authorize('delete', $contact);
         $contact->delete();
         return redirect(route('contacts.index'));
+    }
+
+    /**
+     * Send birthday email to the contact.
+     */
+    public function sendBirthdayNotification(Request $request)
+    {
+        $contact = Contact::findOrFail($request->id);
+        BirthdaySent::dispatch($contact);
+        return back();
     }
 }

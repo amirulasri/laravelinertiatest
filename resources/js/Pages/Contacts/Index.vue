@@ -1,6 +1,6 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head } from '@inertiajs/vue3';
+import { Head, Link } from '@inertiajs/vue3';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import AddContact from './Partials/AddContact.vue';
 import { ref } from 'vue';
@@ -9,7 +9,7 @@ import EditContact from './Partials/EditContact.vue';
 import DangerButton from '@/Components/DangerButton.vue';
 import ConfirmDeleteContact from './Partials/ConfirmDeleteContact.vue';
 
-defineProps(['contacts']);
+const props = defineProps(['contacts']);
 
 const selectedContact = ref(null);
 const editContactModalOpenState = ref(false);
@@ -45,6 +45,14 @@ const capitalize = (value) => {
 <template>
     <Head title="Contacts" />
     <AuthenticatedLayout>
+        <template #header>
+            <h2
+                class="text-xl font-semibold leading-tight text-gray-800"
+            >
+                Contacts
+            </h2>
+        </template>
+
         <div class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8">
             <AddContact />
             <br>
@@ -59,7 +67,7 @@ const capitalize = (value) => {
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     <tr v-for="contact in contacts" :key="contact.id">
-                        <td class="px-6 py-4 whitespace-nowrap">{{ contact.fullname }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap"><Link as="button" :href="route('contacts.edit', contact.id)" class="text-indigo-600 hover:text-indigo-900">{{ contact.fullname }}</Link></td>
                         <td class="px-6 py-4 whitespace-nowrap">{{ dayjs(contact.birthdate).format('DD-MM-YYYY') }}</td>
                         <td class="px-6 py-4 whitespace-nowrap">{{ capitalize(contact.relation) }}</td>
                         <td class="px-6 py-4 whitespace-nowrap space-x-2">

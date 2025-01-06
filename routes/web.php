@@ -3,20 +3,12 @@
 use App\Http\Controllers\ChirpController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProfileController;
-use Illuminate\Foundation\Application;
+use App\Models\Contact;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
-
-Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -31,7 +23,11 @@ Route::resource('chirps', ChirpController::class)
     ->middleware(['auth', 'verified']);
 
 Route::resource('contacts', ContactController::class)
-    ->only(['index', 'store', 'update', 'destroy'])
+    ->only(['index', 'store', 'update', 'edit', 'destroy'])
+    ->middleware(['auth', 'verified']);
+
+Route::post('/contacts/sendbirthdaynotification', [ContactController::class, 'sendBirthdayNotification'])
+    ->name('contacts.sendbirthdaynotification')
     ->middleware(['auth', 'verified']);
 
 require __DIR__ . '/auth.php';
