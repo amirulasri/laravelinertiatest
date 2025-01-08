@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\BirthdaySent;
-use App\Events\ChirpCreated;
-use App\Models\Chirp;
+use App\Jobs\SendBirthdayWish;
 use App\Models\Contact;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -39,7 +37,6 @@ class ContactController extends Controller
             'fullname' => 'required|string|max:255',
             'birthdate' => 'required|date',
             'relation' => 'required|string|max:255',
-            'address' => 'required|string|max:255',
         ]);
 
         $request->user()->contacts()->create($request->all());
@@ -77,7 +74,6 @@ class ContactController extends Controller
             'fullname' => 'required|string|max:255',
             'birthdate' => 'required|date',
             'relation' => 'required|string|max:255',
-            'address' => 'required|string|max:255',
         ]);
 
         $contact->update($request->all());
@@ -101,7 +97,7 @@ class ContactController extends Controller
     public function sendBirthdayNotification(Request $request)
     {
         $contact = Contact::findOrFail($request->id);
-        BirthdaySent::dispatch($contact);
+        SendBirthdayWish::dispatch($contact);
         return back();
     }
 }

@@ -15,7 +15,7 @@ class BirthdayWish extends Notification
     /**
      * Create a new notification instance.
      */
-    public function __construct(public Contact $contact)
+    public function __construct()
     {
         //
     }
@@ -36,9 +36,13 @@ class BirthdayWish extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+            ->subject('Happy birthday!')
+            ->greeting('Happy birthday!')
+            ->line('Haii ' . $notifiable->fullname . ',' . ' Happy birthday! 🎉🎉🎉')
+            ->line('Saya doakan semoga kamu panjang umur, sihat sentiasa, murah rezeki dan berjaya dalam hidup, dunia dan akhirat. Amin.')
+            ->line('Reply ke whatsapp saya jika ada apa-apa kesilapan yee. 😊')
+            ->action('Reply', url('https://wa.me/601135020493?text=Hai,%20nak%20reply%20dari%20email%20birthday'))
+            ->line('Terima kasih kerana baca email ini dan selamat hari lahir sekali lagi. 🎂🎈🎁');
     }
 
     /**
