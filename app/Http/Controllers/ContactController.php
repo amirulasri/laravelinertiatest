@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Jobs\SendBirthdayWish;
+use App\Jobs\TestBirthdayEmail;
 use App\Models\Contact;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
@@ -97,7 +98,8 @@ class ContactController extends Controller
     public function sendBirthdayNotification(Request $request)
     {
         $contact = Contact::findOrFail($request->id);
-        SendBirthdayWish::dispatch($contact);
+        $user = User::findOrFail(auth()->user()->id);
+        TestBirthdayEmail::dispatch($user, $contact);
         return back();
     }
 }

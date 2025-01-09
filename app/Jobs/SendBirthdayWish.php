@@ -27,6 +27,6 @@ class SendBirthdayWish implements ShouldQueue
     public function handle(): void
     {
         // Send birthday wish to the user
-        $this->contact->notify(new BirthdayWish);
+        $this->contact->notify(new BirthdayWish($this->contact));
     }
 }

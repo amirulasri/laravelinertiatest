@@ -34,7 +34,7 @@ watch(() => props.contact, (newContact) => {
         form.fullname = newContact.fullname;
         form.birthdate = newContact.birthdate;
         form.relation = newContact.relation;
-        form.address = newContact.address;
+        form.address = newContact.address ? newContact.address : '';
         form.email = newContact.email ? newContact.email : '';
         form.phone = newContact.phone ? newContact.phone : '';
     }

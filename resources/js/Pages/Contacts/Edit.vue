@@ -19,7 +19,7 @@ const form = useForm({
     fullname: props.contact.fullname,
     birthdate: props.contact.birthdate,
     relation: props.contact.relation,
-    address: props.contact.address,
+    address: props.contact.address ? props.contact.address : '',
     email: props.contact.email ? props.contact.email : '',
     phone: props.contact.phone ? props.contact.phone : '',
 });

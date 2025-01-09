@@ -15,7 +15,7 @@ class BirthdayWish extends Notification
     /**
      * Create a new notification instance.
      */
-    public function __construct()
+    public function __construct(public Contact $contact)
     {
         //
     }
@@ -38,7 +38,7 @@ class BirthdayWish extends Notification
         return (new MailMessage)
             ->subject('Happy birthday!')
             ->greeting('Happy birthday!')
-            ->line('Haii ' . $notifiable->fullname . ',' . ' Happy birthday! 🎉🎉🎉')
+            ->line('Haii ' . $this->contact->fullname . ',' . ' Happy birthday! 🎉🎉🎉')
             ->line('Saya doakan semoga kamu panjang umur, sihat sentiasa, murah rezeki dan berjaya dalam hidup, dunia dan akhirat. Amin.')
             ->line('Reply ke whatsapp saya jika ada apa-apa kesilapan yee. 😊')
             ->action('Reply', url('https://wa.me/601135020493?text=Hai,%20nak%20reply%20dari%20email%20birthday'))
